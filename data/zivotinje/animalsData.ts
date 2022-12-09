@@ -61,7 +61,7 @@ export const animals: AnimalItem[] = [
     title: "Јелен",
     description: "Грациозно биће",
     image: require("../../assets/zivotinje/jelen.jpg"),
-    colorScheme: 1,
-    position: "top",
+    colorScheme: 2,
+    position: "bottom",
   },
 ];
