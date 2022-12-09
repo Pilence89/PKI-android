@@ -8,6 +8,7 @@ const Header = () => {
         style={styles.logo}
         source={require("../../assets/logo/pandaBlack1.png")}
       />
+      <Text style={styles.title}>ПАНДИЦА ЗОО</Text>
     </View>
   );
 };

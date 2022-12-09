@@ -6,11 +6,19 @@ const styles = StyleSheet.create({
     top: 10,
     width: "100%",
     zIndex: 100,
+    flexDirection: "row",
+    alignItems: "center",
   },
   logo: {
     justifyContent: "flex-start",
-    width: 55,
-    height: 55,
+    width: 40,
+    height: 40,
+  },
+  title: {
+    color: "#ffa",
+    fontWeight: "600",
+    fontSize: 16,
+    marginLeft: 5,
   },
 });
 
