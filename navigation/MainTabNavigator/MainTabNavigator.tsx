@@ -6,6 +6,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { useState, useRef } from "react";
 import { Animated } from "react-native";
 import Header from "../../components/Header";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -58,29 +60,33 @@ const MainTabNavigator = () => {
       }}
     >
       <Tab.Screen
-        name="Status"
+        name="Улазнице"
         component={NotImplementedScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="logo-whatsapp" size={size} color={color} />
+            <Entypo name="ticket" size={size} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="Calls"
+        name="Промоције"
         component={NotImplementedScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="call-outline" size={size} color={color} />
+            <MaterialCommunityIcons
+              name="party-popper"
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
       <Tab.Screen
-        name="Camera"
+        name="Догађаји"
         component={NotImplementedScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="camera-outline" size={size} color={color} />
+            <MaterialIcons name="event" size={24} color="black" />
           ),
         }}
       />
@@ -104,7 +110,7 @@ const MainTabNavigator = () => {
         {() => <AnimalsList onScrollhandle={onScrollHandler} />}
       </Tab.Screen>
       <Tab.Screen
-        name="Settings"
+        name="Профил"
         component={NotImplementedScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
