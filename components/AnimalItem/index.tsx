@@ -1,47 +1,72 @@
-import { View, Text, ImageBackground } from "react-native";
+import {
+  View,
+  Text,
+  ImageBackground,
+  Dimensions,
+  Pressable,
+} from "react-native";
 import { AnimalItem as Item } from "../../data/zivotinje/animalsData";
 import StyledButton from "../StyledButton";
 import styles from "./styles";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const AnimalItem = (props: Item) => {
   const { title, description, image, colorScheme = 1, position } = props;
+  // const tabBarHeight = useBottomTabBarHeight();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   return (
-    <View style={styles.animalContainer}>
-      <ImageBackground source={image} style={styles.image} />
-      <View
+    <View
+      style={[
+        styles.animalContainer,
+        // { height: Dimensions.get("screen").height - tabBarHeight },
+        { height: Dimensions.get("screen").height },
+      ]}
+    >
+      <Pressable
+        onPress={() => navigation.navigate("Animal", { ...props })}
         style={[
-          styles.titles,
-          {
-            top: position === "top" ? "5%" : "unset",
-            bottom: position === "bottom" ? "20%" : "unset",
-          },
+          styles.animalContainer,
+          // { height: Dimensions.get("screen").height - tabBarHeight },
+          { height: Dimensions.get("screen").height },
         ]}
       >
-        <Text
-          style={[styles.title, { color: colorScheme === 1 ? "#000" : "#fff" }]}
-        >
-          {title}
-        </Text>
-        <Text
+        <ImageBackground source={image} style={styles.image} />
+        <View
           style={[
-            styles.description,
-            { color: colorScheme === 1 ? "#000" : "#ffa" },
+            styles.titles,
+            position === "top" && { top: "5%" },
+            position === "bottom" && { bottom: "20%" },
           ]}
         >
-          {description}
-        </Text>
-      </View>
-      <View
+          <Text
+            style={[
+              styles.title,
+              { color: colorScheme === 1 ? "#000" : "#fff" },
+            ]}
+          >
+            {title}
+          </Text>
+          <Text
+            style={[
+              styles.description,
+              { color: colorScheme === 1 ? "#000" : "#ffa" },
+            ]}
+          >
+            {description}
+          </Text>
+        </View>
+        {/* <View
         style={[
           styles.buttonsContainer,
-          {
-            top: position === "top" ? "15%" : "unset",
-            bottom: position === "bottom" ? "10%" : "unset",
-          },
+          position === "top" && { top: "15%" },
+          position === "bottom" && { bottom: "10%" },
         ]}
       >
         <StyledButton title="Више детаља" colorScheme={colorScheme} />
-      </View>
+      </View> */}
+      </Pressable>
     </View>
   );
 };
