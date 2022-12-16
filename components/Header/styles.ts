@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   containerOuter: {
     position: "absolute",
     top: 10,
-    width: "fit-content",
+    width: 90,
     zIndex: 100,
     flexDirection: "column",
     alignItems: "flex-start",

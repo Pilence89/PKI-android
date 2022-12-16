@@ -57,7 +57,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       {/* <Animated.View style={[actionBarStyle]}> */}
-      <Header left={true} />
+      {/* <Header left={true} /> */}
       {/* </Animated.View> */}
       <Navigator />
       {/* <Animated.ScrollView onScroll={scrollHandler} style={styles.scrollView}>

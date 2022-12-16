@@ -19,15 +19,17 @@ const AnimalsList = (props: IProp) => {
   //   };
 
   return (
-    <FlatList
-      data={animals}
-      renderItem={({ item }) => <AnimalItem {...item} />}
-      snapToAlignment={"start"}
-      decelerationRate={"fast"}
-      snapToInterval={Dimensions.get("screen").height - tabBarHeight}
-      showsVerticalScrollIndicator={false}
-      onScroll={onScrollhandle}
-    />
+    <View style={{ marginTop: 20 }}>
+      <FlatList
+        data={animals}
+        renderItem={({ item }) => <AnimalItem {...item} />}
+        snapToAlignment={"start"}
+        decelerationRate={"fast"}
+        snapToInterval={Dimensions.get("screen").height}
+        showsVerticalScrollIndicator={false}
+        onScroll={onScrollhandle}
+      />
+    </View>
   );
 };
 

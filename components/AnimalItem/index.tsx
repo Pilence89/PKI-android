@@ -29,7 +29,12 @@ const AnimalItem = (props: Item) => {
         style={[
           styles.animalContainer,
           // { height: Dimensions.get("screen").height - tabBarHeight },
-          { height: Dimensions.get("screen").height },
+          {
+            height:
+              title === "Јелен"
+                ? Dimensions.get("screen").height - 34
+                : Dimensions.get("screen").height + 50,
+          },
         ]}
       >
         <ImageBackground source={image} style={styles.image} />
