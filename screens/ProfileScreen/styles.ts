@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     // justifyContent: "space-evenly",
     width: "100%",
     height: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "rgb(239, 228, 176)",
   },
   image: {
     width: "100%",

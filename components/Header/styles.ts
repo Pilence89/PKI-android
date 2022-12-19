@@ -1,13 +1,14 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   containerOuter: {
     position: "absolute",
-    top: 10,
+    // top: 10,
     width: 90,
     zIndex: 100,
     flexDirection: "column",
     alignItems: "flex-start",
+    // height: Dimensions.get("screen").height
   },
   container: {
     flexDirection: "column",

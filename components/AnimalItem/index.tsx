@@ -14,27 +14,22 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const AnimalItem = (props: Item) => {
   const { title, description, image, colorScheme = 1, position } = props;
-  // const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = useBottomTabBarHeight();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   return (
-    <View
-      style={[
-        styles.animalContainer,
-        // { height: Dimensions.get("screen").height - tabBarHeight },
-        { height: Dimensions.get("screen").height },
-      ]}
-    >
+    // <View
+    //   style={[
+    //     styles.animalContainer,
+    //     // { height: Dimensions.get("screen").height - tabBarHeight },
+    //     { height: Dimensions.get("screen").height },
+    //   ]}
+    // >
       <Pressable
         onPress={() => navigation.navigate("Animal", { ...props })}
         style={[
           styles.animalContainer,
-          // { height: Dimensions.get("screen").height - tabBarHeight },
-          {
-            height:
-              title === "Јелен"
-                ? Dimensions.get("screen").height - 34
-                : Dimensions.get("screen").height + 50,
-          },
+          { height: title != "Јелен" ? Dimensions.get("screen").height : Dimensions.get("screen").height - 34 },
+          // { height: Dimensions.get("window").height },
         ]}
       >
         <ImageBackground source={image} style={styles.image} />
@@ -72,7 +67,7 @@ const AnimalItem = (props: Item) => {
         <StyledButton title="Више детаља" colorScheme={colorScheme} />
       </View> */}
       </Pressable>
-    </View>
+    // </View>
   );
 };
 

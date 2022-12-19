@@ -7,7 +7,7 @@ import AnimalsList from "../../screens/AnimalsScreen/AnimalsScreen";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useState, useRef } from "react";
-import { Animated, Image } from "react-native";
+import { Animated, Easing, Image } from "react-native";
 import Header from "../../components/Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -27,37 +27,63 @@ const MainTabNavigator = () => {
   const [direction, setDirection] = useState(0); // 0 - down / 1 - up
   const [visible, setVisibility] = useState(true);
   const [heightZero] = useState(new Animated.Value(0));
-  // const [height, setHeight] = useState(new Animated.Value(48));
-  const height = useRef(new Animated.Value(1)).current;
-  const onScrollHandler = (e: any) => {
-    const currentOffset = e.nativeEvent.contentOffset.y;
-    var directionCurrent =
-      currentOffset > offset ? 0 : currentOffset < offset ? 1 : direction;
+  const [heightBar1, setHeight1] = useState(new Animated.Value(1));
+  // let heightBar=new Animated.Value(48);
+  const heightBar = useRef(new Animated.Value(1)).current;
+  const onScrollHandler = (e: any, iCall: boolean = false) => {
+
+    var directionCurrent = 0;
+    if(!iCall){
+      const currentOffset = e.nativeEvent.contentOffset.y;
+      directionCurrent = currentOffset > offset ? 0 : currentOffset < offset ? 1 : direction;
+      setOffset(currentOffset);
+      if(currentOffset<=0) directionCurrent = 1;
+    }else{
+      console.log(iCall);
+      if(direction==1)
+      directionCurrent = 0;
+      else
+      directionCurrent =1;
+
+    }
+
+      
+      // console.log(heightBar, currentOffset)
     if (direction != directionCurrent) {
       setDirection(directionCurrent);
     }
-    setOffset(currentOffset);
+
     if (directionCurrent === 0) {
       if (visible) {
         setVisibility(false);
-        Animated.timing(height, {
+        Animated.timing(heightBar, {
           toValue: 0,
           duration: 150,
+          easing: Easing.linear,
           useNativeDriver: true,
         }).start(() => {
           // setHeight(new Animated.Value(0));
+          setHeight1(new Animated.Value(0));
+          // setTimeout(()=>{
+          //   console.log("PALIM")
+          //   onScrollHandler(null, true);
+          // }, 3000)
         });
+        // console.log(heightBar, "dole");
       }
     } else {
-      if (!visible) {
+      if (!visible || iCall) {
         setVisibility(true);
-        Animated.timing(height, {
+        Animated.timing(heightBar, {
           toValue: 1,
           duration: 150,
+          easing: Easing.linear,
           useNativeDriver: true,
         }).start(() => {
-          // setHeight(new Animated.Value(48));
+          // setHeight(new Animated.Value(1));
+          setHeight1(new Animated.Value(1));
         });
+        console.log(heightBar, "gore");
       }
     }
   };
@@ -66,8 +92,14 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       initialRouteName="Животиње"
       screenOptions={{
-        tabBarStyle: { backgroundColor: "whitesmoke" },
+        tabBarStyle: [{ backgroundColor: "transparent", position: "absolute", opacity: heightBar},
+        !visible &&
+        (heightBar1 as any)._value === 0 && {
+          display: "none",
+          height: 0
+        }],
         // headerStyle: { backgroundColor: "whitesmoke" },
+        // tabBarShowLabel: false,
         headerShown: false,
         tabBarHideOnKeyboard: true,
       }}
@@ -84,11 +116,11 @@ const MainTabNavigator = () => {
         //OVO JE ZA ANIMACIJU DA JE MOZES POKRENUTI
         state: (e) => {
           // Do something with the state
-          console.log("state changed", e.data);
+          // console.log("state changed", e.data);
 
           // Do something with the `navigation` object
           if (!navigation.canGoBack()) {
-            console.log("we're on the initial screen");
+            // console.log("we're on the initial screen");
           }
         },
       })}
@@ -121,7 +153,7 @@ const MainTabNavigator = () => {
         component={NotImplementedScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="event" size={24} color="black" />
+            <MaterialIcons name="event" size={size} color={color}/>
           ),
         }}
       />
@@ -131,15 +163,19 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Entypo name="evernote" size={size} color={color} />
           ),
-          tabBarStyle: [
-            {
-              opacity: height,
-            },
-            !visible &&
-              (height as any)._value === (heightZero as any)._value && {
-                display: "none",
-              },
-          ],
+          // tabBarStyle: [
+          //   {
+          //     opacity: heightBar,
+          //   }
+          //     // height: heightBar
+          //     // visible && {transform: [{ translateY: heightBar }]}
+          //   ,
+          //   !visible &&
+          //     (heightBar1 as any)._value === 0 && {
+          //       display: "none",
+          //       height: 0
+          //     },
+          // ],
         }}
       >
         {() => (

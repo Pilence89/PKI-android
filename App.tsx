@@ -57,13 +57,14 @@ export default function App() {
   return (
     <View style={styles.container}>
       {/* <Animated.View style={[actionBarStyle]}> */}
+      <StatusBar style="auto" />
       {/* <Header left={true} /> */}
       {/* </Animated.View> */}
       <Navigator />
       {/* <Animated.ScrollView onScroll={scrollHandler} style={styles.scrollView}>
         <AnimalsList />
       </Animated.ScrollView> */}
-      <StatusBar style="auto" />
+
     </View>
   );
 }

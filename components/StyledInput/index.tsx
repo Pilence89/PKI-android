@@ -20,9 +20,9 @@ export interface IIntput {
 
 const StyledInput = (props: IIntput) => {
   const { editable, value, icon, title, placeholder } = props;
-  const [newMessage, setNewMessage] = useState(value ? value : "");
+  const [newMessage, setNewMessage] = useState(value != undefined  ? value : "");
   const [isEditable, setIsEditable] = useState<boolean>(
-    editable ? editable : true
+    editable != undefined ? editable : true
   );
 
   const onEditClick = () => {

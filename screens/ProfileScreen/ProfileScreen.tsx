@@ -38,7 +38,7 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../../assets/profil/cat2.jpg")}
+        source={require("../../assets/profil/cat2-yellow.png")}
         style={styles.image}
       />
       <View style={styles.titles}>

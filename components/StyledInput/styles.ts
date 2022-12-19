@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 4,
     color: "#D35312",
+    // color: "white"
   },
   input: {
     flex: 1,
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     color: "black",
     borderRadius: 50,
     borderColor: "lightgray",
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1,
   },
   send: {
     backgroundColor: "royalblue",
