@@ -105,7 +105,12 @@ const MainTabNavigator = () => {
         // tabBarShowLabel: false,
         headerShown: true,
         tabBarHideOnKeyboard: true,
-        tabBarLabelStyle: { backgroundColor: "black" },
+        tabBarLabelStyle: {
+          backgroundColor: "black",
+          textTransform: "uppercase",
+          paddingHorizontal: 4,
+          borderRadius: 10,
+        },
         headerRight: () => (
           <Image
             source={require("../../assets/logo/pandaWhite1.png")}
@@ -163,6 +168,11 @@ const MainTabNavigator = () => {
               name="party-popper"
               size={size}
               color={color}
+              style={{
+                textShadowRadius: 10,
+                textShadowColor: "black",
+                textShadowOffset: { width: -1, height: 1 },
+              }}
             />
           ),
           headerShown: false,
@@ -173,7 +183,16 @@ const MainTabNavigator = () => {
         component={NotImplementedScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="event" size={size} color={color} />
+            <MaterialIcons
+              name="event"
+              size={size}
+              color={color}
+              style={{
+                textShadowRadius: 10,
+                textShadowColor: "black",
+                textShadowOffset: { width: -1, height: 1 },
+              }}
+            />
           ),
         }}
       />
@@ -181,7 +200,16 @@ const MainTabNavigator = () => {
         name="Животиње"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Entypo name="evernote" size={size} color={color} />
+            <Entypo
+              name="evernote"
+              size={size}
+              color={color}
+              style={{
+                textShadowRadius: 10,
+                textShadowColor: "black",
+                textShadowOffset: { width: -1, height: 1 },
+              }}
+            />
           ),
           headerShown: false,
           // tabBarStyle: [
@@ -214,7 +242,16 @@ const MainTabNavigator = () => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <AntDesign name="customerservice" size={size} color={color} />
+            <AntDesign
+              name="customerservice"
+              size={size}
+              color={color}
+              style={{
+                textShadowRadius: 10,
+                textShadowColor: "black",
+                textShadowOffset: { width: -1, height: 1 },
+              }}
+            />
           ),
           // headerShown: true,
           // headerRight: () => (
