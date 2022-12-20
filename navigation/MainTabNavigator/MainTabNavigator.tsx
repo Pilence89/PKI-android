@@ -19,6 +19,7 @@ import {
   FlipOutYLeft,
   Layout,
 } from "react-native-reanimated";
+import TicketsScreen from "../../screens/TicketsScreen/TicketsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,24 +32,20 @@ const MainTabNavigator = () => {
   // let heightBar=new Animated.Value(48);
   const heightBar = useRef(new Animated.Value(1)).current;
   const onScrollHandler = (e: any, iCall: boolean = false) => {
-
     var directionCurrent = 0;
-    if(!iCall){
+    if (!iCall) {
       const currentOffset = e.nativeEvent.contentOffset.y;
-      directionCurrent = currentOffset > offset ? 0 : currentOffset < offset ? 1 : direction;
+      directionCurrent =
+        currentOffset > offset ? 0 : currentOffset < offset ? 1 : direction;
       setOffset(currentOffset);
-      if(currentOffset<=0) directionCurrent = 1;
-    }else{
+      if (currentOffset <= 0) directionCurrent = 1;
+    } else {
       console.log(iCall);
-      if(direction==1)
-      directionCurrent = 0;
-      else
-      directionCurrent =1;
-
+      if (direction == 1) directionCurrent = 0;
+      else directionCurrent = 1;
     }
 
-      
-      // console.log(heightBar, currentOffset)
+    // console.log(heightBar, currentOffset)
     if (direction != directionCurrent) {
       setDirection(directionCurrent);
     }
@@ -92,16 +89,29 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       initialRouteName="Животиње"
       screenOptions={{
-        tabBarStyle: [{ backgroundColor: "transparent", position: "absolute", opacity: heightBar},
-        !visible &&
-        (heightBar1 as any)._value === 0 && {
-          display: "none",
-          height: 0
-        }],
+        tabBarStyle: [
+          {
+            backgroundColor: "transparent",
+            position: "absolute",
+            opacity: heightBar,
+          },
+          !visible &&
+            (heightBar1 as any)._value === 0 && {
+              display: "none",
+              height: 0,
+            },
+        ],
         // headerStyle: { backgroundColor: "whitesmoke" },
         // tabBarShowLabel: false,
-        headerShown: false,
+        headerShown: true,
         tabBarHideOnKeyboard: true,
+        tabBarLabelStyle: { backgroundColor: "black" },
+        headerRight: () => (
+          <Image
+            source={require("../../assets/logo/pandaWhite1.png")}
+            style={{ width: 40, height: 40, marginRight: 10 }}
+          />
+        ),
       }}
       tabBar={(props) => (
         <Animated1.View
@@ -127,10 +137,19 @@ const MainTabNavigator = () => {
     >
       <Tab.Screen
         name="Улазнице"
-        component={NotImplementedScreen}
+        component={TicketsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Entypo name="ticket" size={size} color={color} />
+            <Entypo
+              name="ticket"
+              size={size}
+              color={color}
+              style={{
+                textShadowRadius: 10,
+                textShadowColor: "black",
+                textShadowOffset: { width: -1, height: 1 },
+              }}
+            />
           ),
           tabBarHideOnKeyboard: true,
         }}
@@ -146,6 +165,7 @@ const MainTabNavigator = () => {
               color={color}
             />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -153,7 +173,7 @@ const MainTabNavigator = () => {
         component={NotImplementedScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="event" size={size} color={color}/>
+            <MaterialIcons name="event" size={size} color={color} />
           ),
         }}
       />
@@ -163,6 +183,7 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Entypo name="evernote" size={size} color={color} />
           ),
+          headerShown: false,
           // tabBarStyle: [
           //   {
           //     opacity: heightBar,
@@ -195,13 +216,13 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="customerservice" size={size} color={color} />
           ),
-          headerShown: true,
-          headerRight: () => (
-            <Image
-              source={require("../../assets/logo/pandaWhite1.png")}
-              style={{ width: 40, height: 40, marginRight: 10 }}
-            />
-          ),
+          // headerShown: true,
+          // headerRight: () => (
+          //   <Image
+          //     source={require("../../assets/logo/pandaWhite1.png")}
+          //     style={{ width: 40, height: 40, marginRight: 10 }}
+          //   />
+          // ),
         }}
       />
     </Tab.Navigator>

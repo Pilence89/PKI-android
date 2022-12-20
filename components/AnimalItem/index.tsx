@@ -24,40 +24,42 @@ const AnimalItem = (props: Item) => {
     //     { height: Dimensions.get("screen").height },
     //   ]}
     // >
-      <Pressable
-        onPress={() => navigation.navigate("Animal", { ...props })}
+    <Pressable
+      onPress={() => navigation.navigate("Animal", { ...props })}
+      style={[
+        styles.animalContainer,
+        {
+          height:
+            title != "Јелен"
+              ? Dimensions.get("screen").height + 20
+              : Dimensions.get("screen").height - 34,
+        },
+        // { height: Dimensions.get("window").height },
+      ]}
+    >
+      <ImageBackground source={image} style={styles.image} />
+      <View
         style={[
-          styles.animalContainer,
-          { height: title != "Јелен" ? Dimensions.get("screen").height : Dimensions.get("screen").height - 34 },
-          // { height: Dimensions.get("window").height },
+          styles.titles,
+          position === "top" && { top: "5%" },
+          position === "bottom" && { bottom: "20%" },
         ]}
       >
-        <ImageBackground source={image} style={styles.image} />
-        <View
+        <Text
+          style={[styles.title, { color: colorScheme === 1 ? "#000" : "#fff" }]}
+        >
+          {title}
+        </Text>
+        <Text
           style={[
-            styles.titles,
-            position === "top" && { top: "5%" },
-            position === "bottom" && { bottom: "20%" },
+            styles.description,
+            { color: colorScheme === 1 ? "#000" : "#ffa" },
           ]}
         >
-          <Text
-            style={[
-              styles.title,
-              { color: colorScheme === 1 ? "#000" : "#fff" },
-            ]}
-          >
-            {title}
-          </Text>
-          <Text
-            style={[
-              styles.description,
-              { color: colorScheme === 1 ? "#000" : "#ffa" },
-            ]}
-          >
-            {description}
-          </Text>
-        </View>
-        {/* <View
+          {description}
+        </Text>
+      </View>
+      {/* <View
         style={[
           styles.buttonsContainer,
           position === "top" && { top: "15%" },
@@ -66,7 +68,7 @@ const AnimalItem = (props: Item) => {
       >
         <StyledButton title="Више детаља" colorScheme={colorScheme} />
       </View> */}
-      </Pressable>
+    </Pressable>
     // </View>
   );
 };

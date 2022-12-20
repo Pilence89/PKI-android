@@ -19,19 +19,19 @@ const AnimalsList = (props: IProp) => {
   //   const onScrollhandle = (e: any) => {
   //     console.log(e.nativeEvent.contentOffset.y);
   //   };
-// console.log(Dimensions.get("screen").height);
+  // console.log(Dimensions.get("screen").height);
   return (
     <View style={{ marginTop: 20 }}>
-    <FlatList
-      data={animals}
-      renderItem={({ item }) => <AnimalItem {...item} />}
-      snapToAlignment={"start"}
-      decelerationRate={"fast"}
-      snapToInterval={Dimensions.get("window").height + 50}
-      showsVerticalScrollIndicator={false}
-      onScroll={onScrollhandle}
-    />
-    {/* <Header horizontal={1} vertical={1} onPress={onScrollhandle}/> */}
+      <FlatList
+        data={animals}
+        renderItem={({ item }) => <AnimalItem {...item} />}
+        snapToAlignment={"start"}
+        decelerationRate={"fast"}
+        snapToInterval={Dimensions.get("window").height + 50}
+        showsVerticalScrollIndicator={false}
+        onScroll={onScrollhandle}
+      />
+      {/* <Header horizontal={1} vertical={1} onPress={onScrollhandle}/> */}
     </View>
   );
 };
