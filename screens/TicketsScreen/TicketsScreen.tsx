@@ -66,7 +66,7 @@ const TicketsScreen = () => {
     //   />
     // </Tab.Navigator>
 
-    <CustomStepper activeStep={1} arrows steps={5} />
+    <CustomStepper activeStep={1} arrows={true} steps={5} />
 
     // <StepperContainer layout="vertical">
     //   <StepView title="Датум" subTitle="Када желите да посетите Пандицу?">
