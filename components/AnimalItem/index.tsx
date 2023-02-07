@@ -11,11 +11,29 @@ import styles from "./styles";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { storage } from "../../firebase";
+import { getDownloadURL, ref } from "firebase/storage";
+import {useState, useContext} from 'react'
+import GlobalContext from "../../Context/Context";
 
 const AnimalItem = (props: Item) => {
-  const { title, description, image, colorScheme = 1, position } = props;
+  const { title, description, image, colorScheme = 1, position, dodatniOpis, id } = props;
   const tabBarHeight = useBottomTabBarHeight();
+  const [IsRenderScreen, setIsRenderScreen] = useState<boolean>(false);
+  const {setCurrentAnimal} = useContext(GlobalContext);
+  const [imageUri, setImageUri] = useState('');
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  var newImageRef = ref(storage, "animalImages/"+image);
+  getDownloadURL(newImageRef).then((url) =>{
+    setImageUri(url);
+    setIsRenderScreen(true);
+  });
+  // async function getPublicImageUrl() {
+  //   const publicImageUrl = await getDownloadURL(newImageRef);
+  //   return publicImageUrl;
+  // }
+  // const imageUri = getPublicImageUrl();
+  // console.log(dodatniOpis, id);
   return (
     // <View
     //   style={[
@@ -25,20 +43,20 @@ const AnimalItem = (props: Item) => {
     //   ]}
     // >
     <Pressable
-      onPress={() => navigation.navigate("Animal", { ...props })}
+      onPress={() => IsRenderScreen ? navigation.navigate("Animal", { ...props}): null}
       style={[
         styles.animalContainer,
         {
           height:
             title != "Јелен"
-              ? Dimensions.get("screen").height + 20
-              : Dimensions.get("screen").height - 34,
+              ? Dimensions.get("screen").height 
+              : Dimensions.get("screen").height - 55,
         },
         // { height: Dimensions.get("window").height },
       ]}
     >
-      <ImageBackground source={image} style={styles.image} />
-      <View
+      {IsRenderScreen && <ImageBackground source={{ uri: imageUri }} style={styles.image} />}
+      {IsRenderScreen && <View
         style={[
           styles.titles,
           position === "top" && { top: "5%" },
@@ -58,7 +76,7 @@ const AnimalItem = (props: Item) => {
         >
           {description}
         </Text>
-      </View>
+      </View>}
       {/* <View
         style={[
           styles.buttonsContainer,

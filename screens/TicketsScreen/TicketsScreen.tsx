@@ -1,4 +1,4 @@
-import { Button, Text, View } from "react-native";
+import { Button, ImageBackground, Text, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import NotImplementedScreen from "../NotImplementedScreen/NotImplementedScreen";
 import {
@@ -7,28 +7,93 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { StepperContainer, StepView } from "@material.ui/react-native-stepper";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
+import {
+  Calendar,
+  CalendarList,
+  Agenda,
+  DateData,
+} from "react-native-calendars";
 import MobileStepper from "@mui/material/MobileStepper";
 import { Step, StepLabel } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CustomStepper from "../../components/CustomStepper/CustomStepper";
+import CalendarScreen from "./CalendarScreen/CalendarScreen";
+import TicketNumberScreen from "./TicketNumberScreen/TicketNumberScreen";
+import PromoCodeScreen from "./PromoCodeScreen/PromoCodeScreen";
+import SubmitScreen from "./SubmitScreen/SubmitScreen";
+
+import styles from "./styles";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { DealItem } from "../../data/deals/dealsData";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const Tab = createMaterialTopTabNavigator();
 
 const TicketsScreen = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const route = useRoute();
+  const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
+  const { id, promoKod } =
+    route && route.params
+      ? (route.params as DealItem)
+      : { id: "", promoKod: "" };
+  const [parentTicketNumber, setParentTicketNumber] = useState(0);
+  const [childTicketNumber, setChildTicketNumber] = useState(0);
+  const [babyTicketNumber, setBabyTicketNumber] = useState(0);
+  const [promoCode, setPromoCode] = useState(promoKod ? promoKod : "");
+  // const handleNext = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  // };
+  const steps = 4;
+  const [canGoNext, setCanGoNext] = useState([true, true, false, true]);
+  // const handleBack = () => {
+  //   setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  // };
+
+  const [currentStep, setCurrentStep] = useState(1);
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    console.log("NEXT");
+    setCurrentStep((prevActiveStep) =>
+      prevActiveStep + 1 > steps ? prevActiveStep : prevActiveStep + 1
+    );
   };
   const maxSteps = 4;
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    console.log("BACK");
+    setCurrentStep((prevActiveStep) =>
+      prevActiveStep - 1 > 0 ? prevActiveStep - 1 : prevActiveStep
+    );
+  };
+  const activateNextStep = (can: boolean) => {
+    let pomNext = canGoNext;
+    pomNext[currentStep - 1] = can;
+    console.log(canGoNext);
+    setCanGoNext([...pomNext]);
+  };
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const onSubmitHandle = () => {
+    setCanGoNext([true, true, false, true]);
+    setCurrentStep(1);
+    setParentTicketNumber(0);
+    setChildTicketNumber(0);
+    setBabyTicketNumber(0);
+    navigation.navigate("Животиње");
   };
 
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
-  };
+  useEffect(() => {
+    setPromoCode(promoKod);
+    console.log("ULazim promena");
+  }, [promoKod]);
 
+  useEffect(() => {
+    if (parentTicketNumber > 0 || childTicketNumber > 0) {
+      if (canGoNext[currentStep - 1]) activateNextStep(false);
+    } else if (!canGoNext[currentStep - 1]) activateNextStep(true);
+  }, [parentTicketNumber, childTicketNumber]);
+  // const handleStepChange = (step: number) => {
+  //   setCurrentStep(step);
+  // };
+  const tabBarHeight = useBottomTabBarHeight();
   return (
     // <Tab.Navigator>
     //   <Tab.Screen
@@ -65,9 +130,50 @@ const TicketsScreen = () => {
     //     }}
     //   />
     // </Tab.Navigator>
-
-    <CustomStepper activeStep={1} arrows={true} steps={5} />
-
+    <View style={styles.container}>
+      <ImageBackground
+        source={require("../../assets/karte/macka2.jpg")}
+        style={[styles.image]}
+      />
+      <CustomStepper
+        activeStep={currentStep}
+        steps={steps}
+        handleNext={handleNext}
+        handleBack={handleBack}
+        canGoNext={canGoNext}
+      />
+      {currentStep == 1 && (
+        <CalendarScreen
+          canGoNext={activateNextStep}
+          currentDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+        />
+      )}
+      {currentStep == 2 && (
+        <TicketNumberScreen
+          canGoNext={activateNextStep}
+          babyTickets={babyTicketNumber}
+          childTickets={childTicketNumber}
+          parentTickets={parentTicketNumber}
+          setBabyTickets={setBabyTicketNumber}
+          setChildTickets={setChildTicketNumber}
+          setParentTickets={setParentTicketNumber}
+        />
+      )}
+      {currentStep == 3 && (
+        <PromoCodeScreen promoCode={promoCode} setPromoCode={setPromoCode} />
+      )}
+      {currentStep == 4 && (
+        <SubmitScreen
+          babyTicket={babyTicketNumber}
+          childTicket={childTicketNumber}
+          date={selectedDate!.dateString}
+          parentTicket={parentTicketNumber}
+          promoCode={promoCode}
+          onSubmitHandle={onSubmitHandle}
+        />
+      )}
+    </View>
     // <StepperContainer layout="vertical">
     //   <StepView title="Датум" subTitle="Када желите да посетите Пандицу?">
     //     {/* <Text>Step 1 Contents</Text> */}

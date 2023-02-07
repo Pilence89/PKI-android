@@ -6,7 +6,7 @@ import NotImplementedScreen from "../../screens/NotImplementedScreen/NotImplemen
 import AnimalsList from "../../screens/AnimalsScreen/AnimalsScreen";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 import { Animated, Easing, Image, View } from "react-native";
 import Header from "../../components/Header";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -21,6 +21,15 @@ import {
 } from "react-native-reanimated";
 import TicketsScreen from "../../screens/TicketsScreen/TicketsScreen";
 import iconStyles from "../../components/Icons/IconStyles";
+import DealsScreen from "../../screens/DealsScreen/DealsScreen";
+import EventScreen from "../../screens/EventScreen/EventScreen";
+import NotifScreen from "../../screens/NotifScreen/NotifScreen";
+import { Badge } from "react-native-elements";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import GlobalContext from "../../Context/Context";
+import { db } from "../../firebase";
+import { KartaItem } from "../../data/karte/karteItem";
+import { DealItem as DI } from "../../data/deals/dealsData";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,6 +40,47 @@ const MainTabNavigator = () => {
   const [heightZero] = useState(new Animated.Value(0));
   const [opacityZeroArrow] = useState(new Animated.Value(0));
   const [heightBar1, setHeight1] = useState(new Animated.Value(1));
+
+
+  const { brojNotif, setKarte, profileInfo, setBrojNotif } = useContext(GlobalContext);
+  //   const [offset, setOffset] = useState(0);
+  const karteQuery = query(
+    collection(db, "karte")
+  );
+
+  useEffect(() => {
+    if(profileInfo){
+
+
+    const unsubscribe = onSnapshot(karteQuery, (querySnapshot) => {
+      const parsedEvents = querySnapshot.docs.map((doc) => doc.data() as KartaItem);
+      console.log(parsedEvents, "SVE KARTICE");
+      const prom = parsedEvents.filter(x=>x.username== profileInfo?.username).sort((a,b)=>a.datumTrazenja.seconds-b.datumTrazenja.seconds);
+      setKarte(prom);
+      console.log(prom, "Dohvatanje kartica , NASIH KARTICA", profileInfo?.username);
+      let broj = parsedEvents.filter(x=> x.odobreno==true && x.vidjeno==false);
+      console.log(broj, "NEPROCITANE");
+      setBrojNotif(broj.length);
+    });
+    return () => unsubscribe();
+        }
+  }, [profileInfo]);
+
+
+  const { deals, setDeals } = useContext(GlobalContext);
+  //   const [offset, setOffset] = useState(0);
+  const dealsQuery = query(
+    collection(db, "promocije")
+  );
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(dealsQuery, (querySnapshot) => {
+      const parsedDeals = querySnapshot.docs.map((doc) => doc.data() as DI)
+      setDeals(parsedDeals);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // let heightBar=new Animated.Value(48);
   const heightBar = useRef(new Animated.Value(1)).current;
   const onScrollHandler = (e: any, iCall: boolean = false) => {
@@ -64,7 +114,7 @@ const MainTabNavigator = () => {
           // setHeight(new Animated.Value(0));
           if (finished) {
             setHeight1(new Animated.Value(0));
-            console.log(visible, "direction 0");
+            // console.log(visible, "direction 0");
           }
 
           // setTimeout(()=>{
@@ -92,7 +142,7 @@ const MainTabNavigator = () => {
           // setHeight(new Animated.Value(1));
           if (finished) {
             setHeight1(new Animated.Value(1));
-            console.log(visible, "direction 1");
+            // console.log(visible, "direction 1");
           }
         });
         Animated.timing(opacityZeroArrow, {
@@ -162,10 +212,12 @@ const MainTabNavigator = () => {
           tabBarLabelStyle: {
             backgroundColor: navigation.isFocused() ? "#9353dc" : "#2d6850",
             textTransform: "uppercase",
-            paddingHorizontal: 4,
+            paddingHorizontal: 2,
             borderRadius: 10,
             color: "white",
-            fontWeight: "700",
+            fontWeight: "500",
+            fontSize: 9,
+            width:"95%"
           },
           headerRight: () => (
             <Image
@@ -213,7 +265,7 @@ const MainTabNavigator = () => {
         />
         <Tab.Screen
           name="Промоције"
-          component={NotImplementedScreen}
+          component={DealsScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
@@ -223,12 +275,11 @@ const MainTabNavigator = () => {
                 style={iconStyles.tabBarIconStyle}
               />
             ),
-            headerShown: false,
           }}
         />
         <Tab.Screen
           name="Догађаји"
-          component={NotImplementedScreen}
+          component={EventScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons
@@ -250,6 +301,7 @@ const MainTabNavigator = () => {
                 color={color}
                 style={iconStyles.tabBarIconStyle}
               />
+
             ),
             headerShown: false,
             // tabBarStyle: [
@@ -288,6 +340,28 @@ const MainTabNavigator = () => {
                 color={color}
                 style={iconStyles.tabBarIconStyle}
               />
+            ),
+            // headerShown: true,
+            // headerRight: () => (
+            //   <Image
+            //     source={require("../../assets/logo/pandaWhite1.png")}
+            //     style={{ width: 40, height: 40, marginRight: 10 }}
+            //   />
+            // ),
+          }}
+        />
+                <Tab.Screen
+          name="Обавештења"
+          component={NotifScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <View>
+              <Entypo name="tripadvisor" size={size} color={color} style={iconStyles.tabBarIconStyle}/>
+              <Badge
+              status="success"
+              containerStyle={{ position: 'absolute', top: brojNotif ? -7 : 0, right: brojNotif ? -8 : 0 }}
+              value={brojNotif ? brojNotif : ""}
+            /></View>
             ),
             // headerShown: true,
             // headerRight: () => (
